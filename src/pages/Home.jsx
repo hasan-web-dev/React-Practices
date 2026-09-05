@@ -1,4 +1,4 @@
-import { signOut, getAuth } from 'firebase/auth'
+import { getAuth, signOut } from 'firebase/auth'
 import app from '../firebase/config';
 
 const auth = getAuth(app);
@@ -13,7 +13,7 @@ const Home = () => {
         Home
       </h1>
       <br />
-      <button onClick={logoutHandler} className='p-5 bg-blue-600 text-white text-4xl'>Logout</button>
+      <button onClick={logoutHandler} className='h-20 p-5 bg-blue-600 text-white text-4xl'>Logout</button>
     </div>
   )
 }

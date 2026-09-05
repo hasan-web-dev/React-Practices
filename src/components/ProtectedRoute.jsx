@@ -6,35 +6,32 @@ const auth = getAuth();
 
 const ProtectedRoute = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const getUsers = () => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in, see docs for a list of available properties
-                // https://firebase.google.com/docs/reference/js/auth.user
-                const uid = user.uid;
-
-                console.log("user", user);
-                setUser(user)
-                // ...
-            } else {
-                // User is signed out
-                // ...
-                setUser(null)
-            }
-        })
-    };
+    
     useEffect(() => {
-        getUsers()
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Firebase User:", currentUser);
 
-        return () => getUsers()
-    }, [])
-    if (user) {
-        <Navigate to='/' />
-        return children
-    } else {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <p className="text-lg font-medium">Loading...</p>
+            </div>
+        );
+    }
+    if (!user) {
         return <Navigate to={'/login'} />
+    } else {
+        return children
     }
 }
 
-export default ProtectedRoute
+export default ProtectedRoute;

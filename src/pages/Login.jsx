@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from '../firebase/config'
+import app from '../firebase/config.js';
 
 const auth = getAuth(app);
 
@@ -12,7 +12,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const loginHandler = () => {
+  const loginHandler = (e) => {
+    e.preventDefault();
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
@@ -21,6 +23,8 @@ const Login = () => {
         console.log("user", user);
         if (user) {
           navigate("/")
+        }else {
+          navigate("/login")
         }
         // ...
       })
@@ -158,6 +162,7 @@ const Login = () => {
             {/* Login Button */}
             <button
               onClick={loginHandler}
+              type="submit"
               className="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-700 active:scale-[0.99]"
             >
               Sign In
